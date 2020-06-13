@@ -25,12 +25,13 @@ then
     chsh -s /bin/bash
 
     # download auto suggestion
-    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    git clone git://github.com/zsh-users/zsh-syntax-highlighting.git  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
     ### to add new plugins, add download plugin download command here and modify .zshrc to add the plugin ##
     #plugins=(
     #   git
     #   zsh-autosuggestions
+    #   zsh-syntax-highlighting
     #)
     
     if [ -e ~/.zshrc ]
