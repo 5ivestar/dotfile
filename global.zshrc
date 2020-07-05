@@ -27,7 +27,6 @@ function peco-history-selection() {
 
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
-source ~/.bashrc
 
 ### rich Ctrl-T directory path search
 function peco-file-path-selection() {
