@@ -24,7 +24,7 @@
 (keyboard-translate ?\C-h ?\C-?)
 
 ;;set tab width
-(setq-default tab-width 3)
+(setq-default tab-width 4)
 
 ;; kill line and remove "\n" when cursor is at head
 (defun kill-line-twice (&optional numlines)
@@ -158,6 +158,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626" default)))
  '(package-selected-packages
    (quote
     (esup browse-kill-ring yasnippet yaml-mode undohist scala-mode python-mode point-undo nyan-mode moccur-edit markdown-mode magit json-mode highlight-symbol helm-pydoc helm-projectile helm-gtags helm-git-grep groovy-mode gradle-mode go-mode fuzzy flycheck exec-path-from-shell dockerfile-mode coffee-mode auto-complete anzu))))
@@ -170,3 +173,75 @@
 (global-set-key (kbd "M-p") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c m") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-c w") 'mc/mark-all-symbols-like-this)
+
+
+(autoload 'blank-mode           "blank-mode" "Toggle blank visualization."        t)
+(autoload 'blank-toggle-options "blank-mode" "Toggle local `blank-mode' options." t)
+
+;;
+;; whitespace
+;;
+;; (require 'whitespace)
+;; (setq whitespace-style '(face 
+;;                          trailing
+;;                          tabs
+;; ;;                         empty
+;;                          space-mark
+;;                          tab-mark
+;;                          ))
+
+;; (setq whitespace-display-mappings
+;;       '((tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
+
+;; (global-whitespace-mode 1 )
+
+(defun powerline-my-theme ()
+  "Setup the my mode-line."
+  (interactive)
+  (setq powerline-current-separator 'utf-8)
+  (setq-default mode-line-format
+                '("%e"
+                  (:eval
+                   (let* ((active (powerline-selected-window-active))
+                          (mode-line (if active 'mode-line 'mode-line-inactive))
+                          (face1 (if active 'mode-line-1-fg 'mode-line-2-fg))
+                          (face2 (if active 'mode-line-1-arrow 'mode-line-2-arrow))
+                          (separator-left (intern (format "powerline-%s-%s"
+                                                          (powerline-current-separator)
+                                                          (car powerline-default-separator-dir))))
+                          (lhs (list (powerline-raw " " face1)
+                                     (powerline-major-mode face1)
+                                     (powerline-raw " " face1)
+                                     (funcall separator-left face1 face2)
+                                     (powerline-buffer-id nil )
+                                     (powerline-raw " [ ")
+                                     (powerline-raw mode-line-mule-info nil)
+                                     (powerline-raw "%*")
+                                     (powerline-raw " |")
+                                     (powerline-process nil)
+                                     (powerline-vc)
+                                     (powerline-raw " ]")
+                                     ))
+                          (rhs (list (powerline-raw "%4l")
+                                     (powerline-raw ":")
+                                     (powerline-raw "%2c")
+                                     (powerline-raw " | ")                                  
+                                     (powerline-raw "%6p")
+                                     (powerline-raw " ")
+                                     )))
+                     (concat (powerline-render lhs)
+                             (powerline-fill nil (powerline-width rhs)) 
+                             (powerline-render rhs)))))))
+
+(defun make/set-face (face-name fg-color bg-color weight)
+  (make-face face-name)
+  (set-face-attribute face-name nil
+                      :foreground fg-color :background bg-color :box nil :weight weight))
+(make/set-face 'mode-line-1-fg "#282C34" "#EF8300" 'bold)
+(make/set-face 'mode-line-2-fg "#AAAAAA" "#2F343D" 'bold)
+(make/set-face 'mode-line-1-arrow  "#AAAAAA" "#3E4451" 'bold)
+(make/set-face 'mode-line-2-arrow  "#AAAAAA" "#3E4451" 'bold)
+
+(powerline-my-theme)
+;(load-theme 'atom-one-dark t)
+

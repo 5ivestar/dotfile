@@ -39,6 +39,8 @@
     yaml-mode
     yasnippet
     multiple-cursors
+    powerline
+    atom-one-dark-theme
     ))
 
 (defun is-all-packages-installed ()
