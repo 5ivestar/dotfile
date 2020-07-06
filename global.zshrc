@@ -71,7 +71,7 @@ function peco-file-path-selection() {
             peco_prompt="[git add] searching updated files and untracked files >"
             x='"$(git status -s |cut -b 4-)"'
             peco_list="echo $x"
-        elif [ $arg1 = "de" ] || [ $arg1 = "de0" ] || [ $arg1 = "dstop" ] || [ $arg1 = "dstart" ];then
+        elif [ $arg1 = "de" ] || [ $arg1 = "de0" ] || [ $arg1 = "dstop" ] || [ $arg1 = "dstart" ] || [ $arg1 = "drm" ] || [ $arg1 = "dstoprm" ];then
             peco_prompt="[$BUFFER] searching docker containers >"
             peco_list='docker ps -a --format "{{.Names}}"'
         elif [ $arg1 = "docker" ] && [ $arg2 = "run"  ];then
