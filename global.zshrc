@@ -52,8 +52,14 @@ function peco-file-path-selection() {
             peco_prompt="[$BUFFER] searching under ${query} >"
             peco_query=""
         else
-            find_dir="."
-            peco_query=$query
+            if [ ! -z  $query ];then
+                find_dir=$(dirname $query)
+                peco_query=$(basename $query)
+            else
+                find_dir="./"
+                peco_query=""
+            fi
+            peco_prompt="[$BUFFER] searching under ${find_dir} >"
         fi
 
         arg1=${cm[1]}
@@ -61,18 +67,23 @@ function peco-file-path-selection() {
         if [ $arg1 = "cd" ];then
             peco_prompt="[cd] searching dirrectory under $find_dir >"
             peco_list="find ${find_dir} -type d"
+        elif [ $arg1 = "git" ] && [ $arg2 = "push" ];then
+            peco_prompt="[git push] searching git branch"
+            peco_list="git branch -a"
         elif [ $arg1 = "git" ] && [ $arg2 = "checkout" ];then
             peco_prompt="[git checkout] searching git branch and updated files >"
-            x='"$(git branch -a)"'
-            y='"$(git diff --name-only)"'
-            peco_list="echo $x\n$y"
+            peco_list="{git branch -a; git diff --name-only}"
         elif [ $arg1 = "git" ] && [ $arg2 = "add" ];then
             peco_prompt="[git add] searching updated files and untracked files >"
             x='"$(git status -s |cut -b 4-)"'
             peco_list="echo $x"
-        elif [ $arg1 = "de" ] || [ $arg1 = "de0" ] || [ $arg1 = "dstop" ] || [ $arg1 = "dstart" ] || [ $arg1 = "drm" ] || [ $arg1 = "dstoprm" ];then
+        elif [ $arg1 = "de" ] || [ $arg1 = "de0" ] || [ $arg1 = "dstop" ] || [ $arg1 = "dstart" ] || [ $arg1 = "drm" ] || [ $arg1 = "dstoprm" ] || [ $arg1 = "dlogs" ] || [[ $arg1 = "docker" && $arg2 = "inspect" ]];then
             peco_prompt="[$BUFFER] searching docker containers >"
             peco_list='docker ps -a --format "{{.Names}}"'
+        elif [ $arg1 = "dcp" ];then
+            peco_prompt="[$BUFFER] searching docker containers and path>"
+            docker ps -a --format "{{.Names}}" > ~/.dockercontainers
+            peco_list="{ cat ~/.dockercontainers; find ${find_dir} } "
         elif [ $arg1 = "docker" ] && [ $arg2 = "run"  ];then
             peco_prompt="[$BUFFER] searching docker images"
             peco_list='docker images --format "{{.Repository}}:{{.Tag}}"'
@@ -85,8 +96,9 @@ function peco-file-path-selection() {
         else
             filename="$peco_list  |peco --query ${peco_query} --prompt \"${peco_prompt}\""
         fi
-        echo $filename
+        # echo $filename
         filename=$(eval $filename)
+        filename=$(echo $filename | tr "\n" " ")
         cm+=( $filename )
         command=$(printf " %s" "${cm[@]}")
         command=${command:1}
@@ -95,7 +107,7 @@ function peco-file-path-selection() {
     then
         BUFFER=$command
     fi
-    CURSOR=$#BUFFER
+    CURSOR=$(($#BUFFER-1))
     zle reset-prompt
 }
 

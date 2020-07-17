@@ -8,9 +8,9 @@ alias dpa='echo "docker ps -a" && docker ps -a'
 alias da='echo "docker attach" && docker attach'
 alias dstart='echo "docker start" && docker start'
 alias dstop='echo "docker stop" && docker stop'
+alias dlogs='echo "docker logs" && docker logs'
 alias dcp='echo "docker cp" && docker cp' 
 alias drm='echo "docker rm" && docker rm'
-alias dstoprm='echo "docker stop && docker rm"'
 alias drmidang='docker images --filter "dangling=true" -q --no-trunc | xargs docker rmi'
 alias drmdang='docker volume ls -f "dangling=true" -q | xargs docker volume rm'
 alias dc='docker-compose'
@@ -34,9 +34,10 @@ function de_func(){
 }
 alias de='de_func'
 
-function dstoprm(){
-    echo "docker stop $1 && docker rm $1"
-    docker stop $1 && docker rm $1
+alias dstoprm="dstoprm_func"
+function dstoprm_func(){
+    echo "docker stop $@ && docker rm $@"
+    docker stop $@ && docker rm $@
 }
 
 #for amaterasu
