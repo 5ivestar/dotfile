@@ -13,7 +13,7 @@ alias dcp='echo "docker cp" && docker cp'
 alias drm='echo "docker rm" && docker rm'
 alias drmidang='docker images --filter "dangling=true" -q --no-trunc | xargs docker rmi'
 alias drmdang='docker volume ls -f "dangling=true" -q | xargs docker volume rm'
-alias dc='docker-compose'
+alias dc='docker compose'
 
 function drestart(){
     echo "docker stop $1"

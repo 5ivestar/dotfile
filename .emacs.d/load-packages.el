@@ -4,19 +4,19 @@
 ;;add package
 ;;
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 (defvar required-packages
   '(
     anzu
-    auto-complete
+;;    Auto-complete
     coffee-mode
-    color-moccur
+;;    color-moccur
     dockerfile-mode
     exec-path-from-shell
-    fuzzy
+;;    fuzzy
     flycheck
     go-mode
     gradle-mode

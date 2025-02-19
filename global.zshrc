@@ -13,9 +13,8 @@ zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 function peco-history-selection() {
     if [ -z ${BUFFER} ];
     then
-        Result=`history -n 1 | tac | awk '!a[$0]++' | peco --prompt "searching command history >"`
-    else
-        Result=`history -n 1 | tac | awk '!a[$0]++' | peco --query ${BUFFER} --prompt "searching command history >"`
+        Result=`history -n 1 | tac | awk '!a[$0]++' | peco --prompt "searching command history >" | sed 's/\\\\n/\n/g'`
+    else        Result=`history -n 1 | tac | awk '!a[$0]++' | peco --query ${BUFFER} --prompt "searching command history >" | sed 's/\\\\n/\n/g'`
     fi
     if [ ! -z $Result ];
     then
