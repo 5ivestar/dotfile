@@ -72,6 +72,12 @@ function peco-file-path-selection() {
         elif [ $arg1 = "git" ] && [ $arg2 = "checkout" ];then
             peco_prompt="[git checkout] searching git branch and updated files >"
             peco_list="{git branch -a; git diff --name-only}"
+        elif [ $arg1 = "git" ] && [ $arg2 = "switch" ];then
+            peco_prompt="[git switch] searching git branch >"
+            peco_list="git branch -a"
+        elif [ $arg1 = "git" ] && [ $arg2 = "restore" ];then
+            peco_prompt="[git restore] searching updated files >"
+            peco_list="git diff --name-only"
         elif [ $arg1 = "git" ] && [ $arg2 = "add" ];then
             peco_prompt="[git add] searching updated files and untracked files >"
             x='"$(git status -s |cut -b 4-)"'
@@ -136,3 +142,5 @@ function ep(){
         e $file_name
     fi
 }
+
+alias gworktree="~/dotfile/gworktree.sh"

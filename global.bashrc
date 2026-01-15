@@ -54,6 +54,9 @@ alias gcm='echo "git commit -m" && git commit -m'
 alias ga='echo "git add" && git add'
 
 
+#for kubernetes
+alias k='kubectl'
+
 function urlencode {
   echo "$1" | nkf -WwMQ | tr = %
 }

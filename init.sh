@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #checking prereq commands
-prereq="zsh emacs"
+prereq="zsh emacs gwq"
 for c in ${prereq}
 do
     if !(type $c > /dev/null 2>&1); then
@@ -26,7 +26,7 @@ then
 
     # download auto suggestion
     git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-    git clone git://github.com/zsh-users/zsh-syntax-highlighting.git  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
     ### to add new plugins, add download plugin download command here and modify .zshrc to add the plugin ##
     #plugins=(
     #   git

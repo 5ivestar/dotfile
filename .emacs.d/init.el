@@ -7,6 +7,11 @@
 ;;(initchart-record-execution-time-of load file)
 ;;(initchart-record-execution-time-of require feature)
 
+(defconst LOCALE_LANG "ja_JP.UTF-8")
+(setenv "LANG" LOCALE_LANG)
+(setenv "LC_CTYPE" LOCALE_LANG)
+(setenv "LC_ALL" LOCALE_LANG)
+
 (package-initialize)
 
 (load "~/.emacs.d/load-packages.el")
@@ -14,7 +19,7 @@
 (setq default-directory "~/")
 (setq-default auto-save-default t)
 
-;;change window with C-t
+;;Change window with C-t
 (define-key global-map (kbd "C-t") 'other-window)
 
 ;;toggle-truncate-lines with C-c
@@ -54,15 +59,30 @@
 ;; disable tab
 (setq-default indent-tabs-mode nil)
 
-;; Language.
-(set-language-environment 'Japanese)
+;; Coding system & IME (macOS IME, hardware 英数/かな)
+(defun lf/setup-locale-and-ime ()
+  (set-locale-environment LOCALE_LANG)
+  (set-language-environment "Japanese")
+  (prefer-coding-system 'utf-8-unix)
+  (set-default-coding-systems 'utf-8-unix)
+  (setq default-buffer-file-coding-system 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
+  (set-terminal-coding-system 'utf-8-unix)
+  (setq default-input-method nil)
+  (global-unset-key (kbd "C-\\")))
+(lf/setup-locale-and-ime)
+(add-hook 'emacs-startup-hook #'lf/setup-locale-and-ime)
+(add-hook
+ 'after-make-frame-functions
+ (lambda (frame)
+   ;; For daemon frames, apply locale/coding settings per new frame
+   (with-selected-frame frame
+     (lf/setup-locale-and-ime))))
 
-;; Coding system.
-(set-default-coding-systems 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-buffer-file-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
+;; Prevent accidental exit-recursive-edit noise on macOS terminal JIS keys
+(when (and (eq system-type 'darwin)
+           (not (display-graphic-p)))
+  (define-key global-map (kbd "C-M-c") #'ignore))
 
 ;; do not make lock, backup files
 (setq create-lockfiles nil)
@@ -72,9 +92,6 @@
 ;; underline for current line
 (setq hl-line-face 'underline)
 (global-hl-line-mode)
-
-;; not creating backup file
-(setq make-backup-files nil)
 
 ;; show line
 ;;(global-linum-mode t)
@@ -101,22 +118,22 @@
 (global-set-key "\C-h" 'delete-backward-char)
 
 ;;enable auto-complete
-(global-auto-complete-mode t)
+;;(global-auto-complete-mode t)
 
 ;; enable auto-complete even in text mode
-(add-to-list 'ac-modes 'text-mode)
+;;(add-to-list 'ac-modes 'text-mode)
 
 ;; triger auto-complete with tab
-(ac-set-trigger-key "TAB")
+;;(ac-set-trigger-key "TAB")
 
 ;; enable to select prediction with C-p and C-n
-(setq ac-use-menu-map t)
+;;(setq ac-use-menu-map t)
 
 ;; enable fuzzy auto complete
-(setq ac-use-fuzzy t) 
+;;(setq ac-use-fuzzy t) 
 
-;; change line mode with 
-(define-key global-map (kbd "C-c n") 'global-linum-mode)
+;; toggle global line numbers with C-c n
+(define-key global-map (kbd "C-c n") #'global-display-line-numbers-mode)
 
 ;;
 ;;moccur
@@ -159,11 +176,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   (quote
-    ("669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626" default)))
+   '("669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626"
+     default))
  '(package-selected-packages
-   (quote
-    (esup browse-kill-ring yasnippet yaml-mode undohist scala-mode python-mode point-undo nyan-mode moccur-edit markdown-mode magit json-mode highlight-symbol helm-pydoc helm-projectile helm-gtags helm-git-grep groovy-mode gradle-mode go-mode fuzzy flycheck exec-path-from-shell dockerfile-mode coffee-mode auto-complete anzu))))
+   '(anzu auto-complete browse-kill-ring coffee-mode dockerfile-mode esup
+          exec-path-from-shell flycheck fuzzy go-mode gradle-mode
+          groovy-mode helm-git-grep helm-gtags helm-projectile
+          helm-pydoc highlight-symbol json-mode magit markdown-mode
+          moccur-edit mozc nyan-mode point-undo python-mode scala-mode
+          undohist yaml-mode yasnippet)))
 
 (add-to-list 'auto-mode-alist '("\.gradle\'" .groovy-mode))
 
@@ -244,4 +265,3 @@
 
 (powerline-my-theme)
 ;(load-theme 'atom-one-dark t)
-
