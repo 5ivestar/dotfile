@@ -102,27 +102,25 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# For history                                                                                                                                                                                                                                                              
-# History file location                                                                                                                                                                                                                                                    
+# For history
+# History file location
 HISTFILE=~/.zsh_history
-# Keep an extremely large amount of history                                                                                                                                                                                                                                
-# (effectively unlimited, bounded by disk space)                                                                                                                                                                                                                           
+# Keep an extremely large amount of history
+# (effectively unlimited, bounded by disk space)
 HISTSIZE=1000000000
 SAVEHIST=1000000000
-# Share history across all terminals/sessions                                                                                                                                                                                                                              
+# Share history across all terminals/sessions
 setopt share_history
-# Write history to file immediately after each command                                                                                                                                                                                                                     
+# Write history to file immediately after each command
 setopt inc_append_history
-# Record timestamps and execution duration                                                                                                                                                                                                                                 
+# Record timestamps and execution duration
 setopt extended_history
-# Do not record duplicated commands                                                                                                                                                                                                                                        
-setopt hist_ignore_dups        # ignore consecutive duplicates                                                                                                                                                                                                             
-setopt hist_ignore_all_dups    # remove older duplicates                                                                                                                                                                                                                   
-# Remove unnecessary blanks before saving                                                                                                                                                                                                                                  
+# Do not record duplicated commands
+setopt hist_ignore_dups        # ignore consecutive duplicates
+setopt hist_ignore_all_dups    # remove older duplicates
+# Remove unnecessary blanks before saving
 setopt hist_reduce_blanks
-# Do not store commands starting with a space (for secrets)                                                                                                                                                                                                                
-setopt hist_ignore_space
-# Do not store certain internal history commands                                                                                                                                                                                                                           
+# Do not store certain internal history commands
 setopt hist_no_store
 
 

@@ -29,38 +29,44 @@ EOF
   exit 2
 }
 
-# Copy .vscode/settings.json from current repo to new worktree and exclude from tracking (per-worktree)
+# Copy .vscode/settings.json and launch.json from current repo to new worktree and exclude from tracking (per-worktree)
 copy_and_exclude_vscode_settings() {
   local src_root="$1"
   local dst_root="$2"
 
-  local src_settings="$src_root/.vscode/settings.json"
-  local dst_settings="$dst_root/.vscode/settings.json"
+  # Files to copy and exclude
+  local vscode_files=("settings.json" "launch.json")
 
-  if [[ -f "$src_settings" ]]; then
-    mkdir -p "$dst_root/.vscode"
-    cp -f "$src_settings" "$dst_settings"
-  else
-    # nothing to copy; still exclude (in case it gets created later)
-    mkdir -p "$dst_root/.vscode"
-  fi
+  mkdir -p "$dst_root/.vscode"
 
   # Per-worktree exclude: write into that worktree's git dir info/exclude
   local dst_gitdir
   dst_gitdir="$(git -C "$dst_root" rev-parse --git-dir)"
   mkdir -p "$dst_gitdir/info"
-
   local exclude_file="$dst_gitdir/info/exclude"
-  # avoid duplicates
-  if [[ ! -f "$exclude_file" ]] || ! grep -qxF ".vscode/settings.json" "$exclude_file"; then
-    echo ".vscode/settings.json" >> "$exclude_file"
-  fi
 
-  # If the file is tracked, .git/info/exclude won't stop tracking.
-  # Mark it skip-worktree in THIS worktree so changes won't show up.
-  if git -C "$dst_root" ls-files --error-unmatch ".vscode/settings.json" >/dev/null 2>&1; then
-    git -C "$dst_root" update-index --skip-worktree ".vscode/settings.json" || true
-  fi
+  for filename in "${vscode_files[@]}"; do
+    local src_file="$src_root/.vscode/$filename"
+    local dst_file="$dst_root/.vscode/$filename"
+    local exclude_path=".vscode/$filename"
+
+    # Copy file if it exists
+    if [[ -f "$src_file" ]]; then
+      cp -f "$src_file" "$dst_file"
+      echo "  copied: $exclude_path"
+    fi
+
+    # Add to exclude (avoid duplicates)
+    if [[ ! -f "$exclude_file" ]] || ! grep -qxF "$exclude_path" "$exclude_file"; then
+      echo "$exclude_path" >> "$exclude_file"
+    fi
+
+    # If the file is tracked, .git/info/exclude won't stop tracking.
+    # Mark it skip-worktree in THIS worktree so changes won't show up.
+    if git -C "$dst_root" ls-files --error-unmatch "$exclude_path" >/dev/null 2>&1; then
+      git -C "$dst_root" update-index --skip-worktree "$exclude_path" || true
+    fi
+  done
 }
 
 # Copy all .env files from current repo to new worktree (preserving directory structure)
