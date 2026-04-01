@@ -15,6 +15,7 @@
     coffee-mode
 ;;    color-moccur
     dockerfile-mode
+    dtrt-indent
     exec-path-from-shell
 ;;    fuzzy
     flycheck

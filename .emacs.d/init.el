@@ -176,15 +176,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626"
-     default))
+   '("669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626" default))
  '(package-selected-packages
-   '(anzu auto-complete browse-kill-ring coffee-mode dockerfile-mode esup
-          exec-path-from-shell flycheck fuzzy go-mode gradle-mode
-          groovy-mode helm-git-grep helm-gtags helm-projectile
-          helm-pydoc highlight-symbol json-mode magit markdown-mode
-          moccur-edit mozc nyan-mode point-undo python-mode scala-mode
-          undohist yaml-mode yasnippet)))
+   '(anzu auto-complete browse-kill-ring coffee-mode dockerfile-mode esup exec-path-from-shell flycheck fuzzy go-mode gradle-mode groovy-mode helm-git-grep helm-gtags helm-projectile helm-pydoc highlight-symbol json-mode magit markdown-mode moccur-edit mozc nyan-mode point-undo python-mode scala-mode undohist yaml-mode yasnippet)))
 
 (add-to-list 'auto-mode-alist '("\.gradle\'" .groovy-mode))
 
@@ -265,3 +259,6 @@
 
 (powerline-my-theme)
 ;(load-theme 'atom-one-dark t)
+
+(dtrt-indent-mode 1)
+(add-hook 'json-mode-hook #'dtrt-indent-adapt)
